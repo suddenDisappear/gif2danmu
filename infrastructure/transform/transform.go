@@ -1,4 +1,4 @@
-package library
+package transform
 
 import "gif2danmu/infrastructure/resolver"
 

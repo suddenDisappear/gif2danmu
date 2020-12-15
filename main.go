@@ -1,23 +1,13 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "gif2danmu/infrastructure/transform/gif_image"
 
 func main() {
-	var init = make([][]string, 4)
-	for y := 0; y < 4; y++ {
-		var tmp = make([]string, 4)
-		for x := 0; x < 4; x++ {
-			tmp[x] = " "
-		}
-		init[y] = tmp
+	// TODO:替换成接收命令行参数
+	g, err := gif_image.Open("D:\\download\\image\\test_resize.gif")
+	if err != nil {
+		panic(err)
 	}
-	init[0][2] = "■"
-	var res string
-	for _, t := range init {
-		res = res + strings.Join(t, "") + "\n"
-	}
-	fmt.Printf("%v", strings.TrimRight(res, "\n"))
+	// TODO:处理实际输入输出
+	_, _ = g.Transform()
 }
