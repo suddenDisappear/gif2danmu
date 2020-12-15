@@ -44,8 +44,16 @@ func Recovery(colorMap transform.ColorMap) *Image {
 		recovery = image.NewRGBA(image.Rect(0, 0, len(v.Contents[0]), len(v.Contents)))
 		break
 	}
+	// 总有效像素数
+	var total int64
+	for _, info := range colorMap {
+		total += info.PixelCount
+	}
 	// 图像还原
 	for c, info := range colorMap {
+		if info.ShouldIgnore(total) {
+			continue
+		}
 		for i := 0; i < len(info.Contents); i++ {
 			for j := 0; j < len(info.Contents[i]); j++ {
 				if info.Contents[i][j] != transform.PixelSymbol {
