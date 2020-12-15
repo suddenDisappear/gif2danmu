@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/png"
 	"os"
+	"strconv"
 )
 
 // NewString2Dimensions return two dimensions array with default value
@@ -31,4 +32,22 @@ func SavePngImage(i *image.Image, path string) error {
 	}
 	defer f.Close()
 	return png.Encode(f, *i)
+}
+
+func SaveFile(contents string, path string) error {
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = f.WriteString(contents)
+	return err
+}
+
+func IntSliceToString(origin []int) string {
+	res := ""
+	for _, v := range origin {
+		res += strconv.Itoa(v) + "\n"
+	}
+	return res
 }

@@ -37,6 +37,11 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 	if err != nil {
 		return nil, customize_error.New(err, fmt.Sprintf("初始化文件夹%s失败", dir))
 	}
+	// 保存每帧间隔信息
+	err = util.SaveFile(util.IntSliceToString(i.origin.Delay), dir+string(filepath.Separator)+"delay.txt")
+	if err != nil {
+		return nil, customize_error.New(err, "保存帧延时信息失败")
+	}
 	for index, frame := range i.origin.Image {
 		c, err := common.OpenInternal(frame)
 		if err != nil {
