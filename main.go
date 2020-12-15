@@ -13,7 +13,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_, _ = g.Transform()
+	_, err = g.Transform()
+	if err != nil {
+		panic(err)
+	}
 }
 
 type Flags struct {
