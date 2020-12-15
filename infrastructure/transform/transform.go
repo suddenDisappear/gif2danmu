@@ -1,7 +1,14 @@
 package transform
 
-import "gif2danmu/infrastructure/resolver"
+import "image"
+
+const (
+	DefaultFill = " "
+	PixelSymbol = "■"
+	NewLine     = "\n"
+)
 
 type Transformer interface {
-	Transform() (resolver.Resolver, error)
+	GetOrigin() *image.Image
+	Transform() (*ColorMap, error)
 }
