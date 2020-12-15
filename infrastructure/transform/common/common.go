@@ -79,7 +79,7 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 				continue
 			}
 			// 根据rgba分组
-			key := fmt.Sprintf("#%s%s%s%s", strconv.FormatUint(uint64(r>>8), 16), strconv.FormatUint(uint64(g>>8), 16), strconv.FormatUint(uint64(b>>8), 16), strconv.FormatUint(uint64(a>>8), 16))
+			key := fmt.Sprintf("#%02s%02s%02s%02s", strconv.FormatUint(uint64(r>>8), 16), strconv.FormatUint(uint64(g>>8), 16), strconv.FormatUint(uint64(b>>8), 16), strconv.FormatUint(uint64(a>>8), 16))
 			if _, ok := colorMap[key]; !ok {
 				colorMap[key] = &transform.ColorInfo{Contents: make([][]string, len(init))}
 				for k, v := range init {
