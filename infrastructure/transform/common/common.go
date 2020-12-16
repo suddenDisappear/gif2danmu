@@ -33,6 +33,7 @@ func OpenInternal(image image.Image) (transform.Transformer, error) {
 	return &Image{origin: image, internal: true}, nil
 }
 
+// Transform 转化image为colorMap.
 func (i *Image) Transform() (*transform.ColorMap, error) {
 	// 初始化空格数组
 	bounds := i.origin.Bounds()
@@ -64,10 +65,7 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 	return &colorMap, nil
 }
 
-func (i *Image) GetOrigin() *image.Image {
-	return &i.origin
-}
-
+// shouldIgnore 判断指定颜色是否被跳过(目前跳过白色和全透明色).
 func (i *Image) shouldIgnore(r, g, b, a uint32) bool {
 	var max uint32 = 1<<16 - 1
 	if r == max && g == max && b == max {
