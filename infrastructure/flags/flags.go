@@ -37,10 +37,10 @@ func (f *Flags) Validate() error {
 func RegisterFlags() *Flags {
 	var flags Flags
 	flag.StringVar(&flags.File, "file", "", "文件地址")
-	flag.StringVar(&flags.OutputDir, "output", defaultOutputDir, "输出文件夹，默认当前目录output文件夹")
-	flag.StringVar(&flags.Fill, "fill", defaultFill, "填空元素，用于占位，默认空格，不可为#")
-	flag.StringVar(&flags.PixelSymbol, "pixel_symbol", defaultPixelSymbol, "像素标记，默认■")
-	flag.Uint64Var(&flags.PixelLimit, "pixel_limit", acFunPixelLimit, "转化后单个颜色对应像素个数限制，默认5000")
+	flag.StringVar(&flags.OutputDir, "output", defaultOutputDir, "输出文件夹")
+	flag.StringVar(&flags.Fill, "fill", defaultFill, "填空元素，用于占位，不可为#")
+	flag.StringVar(&flags.PixelSymbol, "pixel_symbol", defaultPixelSymbol, "像素标记，不可为#")
+	flag.Uint64Var(&flags.PixelLimit, "pixel_limit", acFunPixelLimit, "转化后单个颜色对应像素个数限制")
 	flag.BoolVar(&flags.Debug, "debug", false, "是否开启debug模式，开启将打印错误堆栈信息")
 	flag.Float64Var(&flags.PixelCountThreshold, "pixel_count_threshold", 0, "过滤掉像素在图像帧占比小于当前值的颜色，会丢失图像细节")
 	return &flags
