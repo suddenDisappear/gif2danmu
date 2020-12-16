@@ -28,7 +28,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	_, err = g.Transform()
+	err = g.Transform()
 	if err != nil {
 		fmt.Println(err)
 		return
