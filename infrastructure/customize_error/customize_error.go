@@ -19,7 +19,10 @@ func New(err error, msg string) error {
 }
 
 func (u *userDefinedError) Error() string {
-	msg := u.msg + "\n" + u.err.Error()
+	msg := u.msg + "\n"
+	if u.err != nil {
+		msg += u.err.Error()
+	}
 	if debug {
 		if u.stackTrace != nil {
 			msg += "\n" + strings.Join(*u.stackTrace, "\n")
@@ -29,6 +32,9 @@ func (u *userDefinedError) Error() string {
 }
 
 func formatErrorStack(err error) *[]string {
+	if err == nil {
+		return nil
+	}
 	str := fmt.Sprintf("%+v", errors.WithStack(err))
 	str = strings.ReplaceAll(str, "\n\t", "\n")
 	stack := strings.Split(str, "\n")
