@@ -35,7 +35,8 @@ func Open(path string) (*Image, error) {
 // Transform 转换图片并输出到指定文件夹.
 func (i *Image) Transform() (*transform.ColorMap, error) {
 	// 初始化文件夹
-	dir := transform.GetConfig().OutputDir + string(filepath.Separator) + i.taskName
+	separator := string(filepath.Separator)
+	dir := transform.GetConfig().OutputDir + separator + i.taskName
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
 		return nil, customize_error.New(err, fmt.Sprintf("初始化文件夹%s失败", dir))
@@ -52,16 +53,16 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 		}
 		// 保存转换后文本信息
 		indexStr := strconv.Itoa(index)
-		err = colorMap.Save(dir + string(filepath.Separator) + indexStr + ".txt")
+		err = colorMap.Save(dir + separator + indexStr + ".txt")
 		if err != nil {
 			return nil, customize_error.New(err, fmt.Sprintf("保存第%d帧文本信息失败", index))
 		}
 		// 保存还原后图片
-		frameImage, err := common.OpenInternal(colorMap.Recovery())
-		if err != nil {
-			return nil, customize_error.New(err, fmt.Sprintf("恢复第%d帧图像信息错误", index))
+		restoredImage := colorMap.Recover()
+		if restoredImage == nil {
+			return nil, fmt.Errorf("恢复第%d帧图像信息错误", index)
 		}
-		err = util.SavePngImage(frameImage.GetOrigin(), dir+string(filepath.Separator)+indexStr+".png")
+		err = util.SavePngImage(&restoredImage, dir+separator+indexStr+".png")
 		if err != nil {
 			return nil, customize_error.New(err, fmt.Sprintf("保存第%d帧png图像失败", index))
 		}

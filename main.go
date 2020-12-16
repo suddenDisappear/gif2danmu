@@ -16,7 +16,8 @@ func main() {
 	// 验证数据
 	err := fl.Validate()
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	// 初始化
 	transform.InitConfig(*fl)

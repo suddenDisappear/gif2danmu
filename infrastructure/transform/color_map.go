@@ -47,7 +47,7 @@ func (c ColorMap) Save(path string) error {
 }
 
 // Recovery 从信息中恢复图像.
-func (c ColorMap) Recovery() image.Image {
+func (c ColorMap) Recover() image.Image {
 	// 初始化画布
 	var recovery = new(image.RGBA)
 	for _, v := range c {
