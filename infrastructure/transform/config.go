@@ -11,20 +11,22 @@ var (
 )
 
 type Config struct {
-	Fill        string
-	PixelSymbol string
-	PixelLimit  uint64
-	OutputDir   string
+	Fill                string
+	PixelSymbol         string
+	PixelLimit          uint64
+	PixelCountThreshold float64
+	OutputDir           string
 }
 
 // InitConfig 转换配置(仅第一次调用有效).
 func InitConfig(flags flags.Flags) *Config {
 	once.Do(func() {
 		conf = Config{
-			Fill:        flags.Fill,
-			PixelSymbol: flags.PixelSymbol,
-			PixelLimit:  flags.PixelLimit,
-			OutputDir:   flags.OutputDir,
+			Fill:                flags.Fill,
+			PixelSymbol:         flags.PixelSymbol,
+			PixelLimit:          flags.PixelLimit,
+			PixelCountThreshold: flags.PixelCountThreshold,
+			OutputDir:           flags.OutputDir,
 		}
 	})
 	return &conf

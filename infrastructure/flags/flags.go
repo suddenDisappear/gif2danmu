@@ -14,12 +14,13 @@ const (
 )
 
 type Flags struct {
-	File        string
-	OutputDir   string
-	Fill        string
-	PixelSymbol string
-	PixelLimit  uint64
-	Debug       bool
+	File                string
+	OutputDir           string
+	Fill                string
+	PixelSymbol         string
+	PixelLimit          uint64
+	PixelCountThreshold float64
+	Debug               bool
 }
 
 func (f *Flags) Validate() error {
@@ -41,5 +42,6 @@ func RegisterFlags() *Flags {
 	flag.StringVar(&flags.PixelSymbol, "pixel_symbol", defaultPixelSymbol, "像素标记，默认■")
 	flag.Uint64Var(&flags.PixelLimit, "pixel_limit", acFunPixelLimit, "转化后单个颜色对应像素个数限制，默认5000")
 	flag.BoolVar(&flags.Debug, "debug", false, "是否开启debug模式，开启将打印错误堆栈信息")
+	flag.Float64Var(&flags.PixelCountThreshold, "pixel_count_threshold", 0, "过滤掉像素在图像帧占比小于当前值的颜色，会丢失图像细节")
 	return &flags
 }
