@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-// NewString2Dimensions return two dimensions array with default value
+// New2Dimensions return two dimensions array with default value
 // x is column and y is row.
 func New2Dimensions(x, y int, defaultValue ...string) [][]string {
 	var s = make([][]string, y)
@@ -22,6 +22,7 @@ func New2Dimensions(x, y int, defaultValue ...string) [][]string {
 	return s
 }
 
+// SavePngImage save png image to specific path.
 func SavePngImage(i *image.Image, path string) error {
 	if i == nil {
 		return nil
@@ -34,6 +35,7 @@ func SavePngImage(i *image.Image, path string) error {
 	return png.Encode(f, *i)
 }
 
+// SaveFile save string contents to specific path.
 func SaveFile(contents string, path string) error {
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
 	if err != nil {
@@ -44,10 +46,11 @@ func SaveFile(contents string, path string) error {
 	return err
 }
 
-func IntSliceToString(origin []int) string {
+// IntSliceToString concat int to string with separator.
+func IntSliceToString(origin []int, separator string) string {
 	res := ""
 	for _, v := range origin {
-		res += strconv.Itoa(v) + "\n"
+		res += strconv.Itoa(v) + separator
 	}
 	return res
 }

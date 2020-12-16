@@ -17,6 +17,7 @@ type Image struct {
 	taskName string
 }
 
+// Open 加载指定文件.
 func Open(path string) (*Image, error) {
 	// 打开文件
 	f, err := os.OpenFile(path, os.O_RDONLY, os.ModePerm)
@@ -31,17 +32,15 @@ func Open(path string) (*Image, error) {
 	return &Image{origin: g, taskName: filepath.Base(path)}, nil
 }
 
+// Transform 转换图片并输出到指定文件夹.
 func (i *Image) Transform() (*transform.ColorMap, error) {
-	dir := "output" + string(filepath.Separator) + i.taskName
+	// 初始化文件夹
+	dir := transform.GetConfig().OutputDir + string(filepath.Separator) + i.taskName
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
 		return nil, customize_error.New(err, fmt.Sprintf("初始化文件夹%s失败", dir))
 	}
-	// 保存每帧间隔信息
-	err = util.SaveFile(util.IntSliceToString(i.origin.Delay), dir+string(filepath.Separator)+"delay.txt")
-	if err != nil {
-		return nil, customize_error.New(err, "保存帧延时信息失败")
-	}
+	// 保存每帧图片转换字符和还原png图像
 	for index, frame := range i.origin.Image {
 		c, err := common.OpenInternal(frame)
 		if err != nil {
@@ -51,18 +50,26 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 		if err != nil {
 			return nil, customize_error.New(err, fmt.Sprintf("转换第%d帧失败", index))
 		}
-		// 保存txt文件
+		// 保存转换后文本信息
 		indexStr := strconv.Itoa(index)
 		err = colorMap.Save(dir + string(filepath.Separator) + indexStr + ".txt")
 		if err != nil {
-			return nil, err
+			return nil, customize_error.New(err, fmt.Sprintf("保存第%d帧文本信息失败", index))
 		}
-		// 保存还原图片
-		frameImage := common.Recovery(*colorMap)
+		// 保存还原后图片
+		frameImage, err := common.OpenInternal(colorMap.Recovery())
+		if err != nil {
+			return nil, customize_error.New(err, fmt.Sprintf("恢复第%d帧图像信息错误", index))
+		}
 		err = util.SavePngImage(frameImage.GetOrigin(), dir+string(filepath.Separator)+indexStr+".png")
 		if err != nil {
-			return nil, err
+			return nil, customize_error.New(err, fmt.Sprintf("保存第%d帧png图像失败", index))
 		}
+	}
+	// 保存帧间隔信息
+	err = util.SaveFile(util.IntSliceToString(i.origin.Delay, "\n"), dir+string(filepath.Separator)+"delay.txt")
+	if err != nil {
+		return nil, customize_error.New(err, "保存帧延时信息失败")
 	}
 	return nil, nil
 }
