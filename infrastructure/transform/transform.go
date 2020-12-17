@@ -1,5 +1,5 @@
 package transform
 
 type Transformer interface {
-	Transform() (*ColorMap, error)
+	Transform() (ColorMap, error)
 }

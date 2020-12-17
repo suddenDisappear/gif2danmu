@@ -11,7 +11,7 @@ var debug bool
 type userDefinedError struct {
 	err        error
 	msg        string
-	stackTrace *[]string // err stack_trace_info
+	stackTrace []string // err stack_trace_info
 }
 
 func New(err error, msg string) error {
@@ -19,27 +19,23 @@ func New(err error, msg string) error {
 }
 
 func (u *userDefinedError) Error() string {
-	msg := u.msg + "\n"
+	s := []string{u.msg}
 	if u.err != nil {
-		msg += u.err.Error()
+		s = append(s, u.err.Error())
 	}
 	if debug {
-		if u.stackTrace != nil {
-			msg += "\n" + strings.Join(*u.stackTrace, "\n")
-		}
+		s = append(s, u.stackTrace...)
 	}
-	return msg
+	return strings.Join(s, "\n")
 }
 
-func formatErrorStack(err error) *[]string {
+func formatErrorStack(err error) []string {
 	if err == nil {
 		return nil
 	}
 	str := fmt.Sprintf("%+v", errors.WithStack(err))
-	str = strings.ReplaceAll(str, "\n\t", "\n")
 	stack := strings.Split(str, "\n")
-	stack = stack[5:]
-	return &stack
+	return stack[5:]
 }
 
 // SetDebug enable/disable debug.

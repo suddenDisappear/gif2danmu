@@ -34,7 +34,7 @@ func OpenInternal(image image.Image) (transform.Transformer, error) {
 }
 
 // Transform 转化image为colorMap.
-func (i *Image) Transform() (*transform.ColorMap, error) {
+func (i *Image) Transform() (transform.ColorMap, error) {
 	// 初始化空格数组
 	bounds := i.origin.Bounds()
 	init := util.New2Dimensions(bounds.Max.X, bounds.Max.Y, transform.GetConfig().Fill)
@@ -62,7 +62,7 @@ func (i *Image) Transform() (*transform.ColorMap, error) {
 			colorMap[key].PixelCount = colorMap[key].PixelCount + 1
 		}
 	}
-	return &colorMap, nil
+	return colorMap, nil
 }
 
 // shouldIgnore 判断指定颜色是否被跳过(目前跳过白色和全透明色).
